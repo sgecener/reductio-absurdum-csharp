@@ -68,6 +68,8 @@ void MainMenu()
                         1. Display Products
                         2. Add a Product
                         3. Find Product By Type
+                        4. Delete Product
+                        5. Update Product Details
                         0. Exit
                         ");
                         
@@ -94,6 +96,16 @@ void MainMenu()
         case "3":
             Console.Clear();
             FindByType();
+            MainMenu();
+            break;
+        case "4":
+            Console.Clear();
+            DeleteProduct();
+            MainMenu();
+            break;
+        case "5":
+            Console.Clear();
+            UpdateProduct();
             MainMenu();
             break;
 
@@ -130,17 +142,143 @@ void AddProduct()
                             3. Enchanted Object
                             4. Wand
     ");
-    newProduct.ProductTypeId = int.Parse(Console.ReadLine());
-        if (newProduct.ProductTypeId < 1 || newProduct.ProductTypeId > 4 ) {
-            Console.WriteLine("Please pick a valid product type");
+
+    int productTypeId;
+    while (true)
+    {
+        Console.WriteLine("Pick a valid type:\n");
+        if (int.TryParse(Console.ReadLine(), out productTypeId) && productTypeId >= 1 && productTypeId <= 4)
+        {
+            newProduct.ProductTypeId = productTypeId;
+            break; // Exit the loop if input is valid
         }
-     
+        else
+        {
+            Console.WriteLine("Invalid input. Please enter a number between 1 and 4.");
+        }
+    }
+        
+
+     Console.WriteLine("Product added successfully!");
+        
+    
 
     newProduct.Sold = false;
 
     products.Add(newProduct);
 
-    Console.WriteLine("Product added successfully!");
+
+}
+
+void DeleteProduct()
+{
+     for (int i = 0; i < products.Count; i++)
+    {
+        Console.WriteLine($"{i + 1}. {ProductDetails(products[i])}");
+    }
+
+        Console.WriteLine("Choose a product to delete:");
+        try {
+            int response = int.Parse(Console.ReadLine().Trim());
+
+            products.RemoveAt(response - 1);
+        }
+        catch (FormatException)
+        {
+        Console.WriteLine("Please type number matching the item!");
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+        Console.WriteLine("Please choose an existing item only!");
+        }
+
+        Console.WriteLine("Deleted successfully!");
+    
+}
+
+void UpdateProduct() 
+{
+    Console.WriteLine("Update Product:");
+
+    // Display all products
+    for (int i = 0; i < products.Count; i++)
+    {
+        Console.WriteLine($"{i + 1}. {ProductDetails(products[i])} {(products[i].Sold ? "was sold" : "is available")} for {products[i].Price} gold coins");
+    }
+
+    Console.WriteLine("Choose a product to update:");
+    int productIndex;
+    while (true)
+    {
+        if (int.TryParse(Console.ReadLine(), out productIndex) && productIndex >= 1 && productIndex <= products.Count)
+        {
+            break; // Exit the loop if input is valid
+        }
+        else
+        {
+            Console.WriteLine("Invalid input. Please enter a number corresponding to a product.");
+        }
+    }
+
+    Product selectedProduct = products[productIndex - 1];
+
+    Console.WriteLine("Enter a new name for the product (or leave blank to keep the current name):");
+    string newName = Console.ReadLine();
+    if (!string.IsNullOrEmpty(newName))
+    {
+        selectedProduct.Name = newName;
+    }
+
+    Console.WriteLine("Enter a new price for the product (or leave blank to keep the current price):");
+    string newPriceInput = Console.ReadLine();
+    if (!string.IsNullOrEmpty(newPriceInput))
+    {
+        decimal newPrice;
+        if (decimal.TryParse(newPriceInput, out newPrice))
+        {
+            selectedProduct.Price = newPrice;
+        }
+        else
+        {
+            Console.WriteLine("Invalid price input. Price remains unchanged.");
+        }
+    }
+
+    Console.WriteLine("Change the product type? (y/n)");
+    if (Console.ReadLine().ToLower() == "y")
+    {
+        Console.WriteLine(@"Choose the new type for the product:
+                            1. Apparel
+                            2. Potion
+                            3. Enchanted Object
+                            4. Wand
+        ");
+
+        int newProductTypeId;
+        while (true)
+        {
+            Console.WriteLine("Pick a valid type:");
+            if (int.TryParse(Console.ReadLine(), out newProductTypeId) && newProductTypeId >= 1 && newProductTypeId <= 4)
+            {
+                selectedProduct.ProductTypeId = newProductTypeId;
+                break; // Exit the loop if input is valid
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a number between 1 and 4.");
+            }
+        }
+    }
+
+     Console.WriteLine($"Current availability: {(selectedProduct.Sold ? "Sold" : "Available")}");
+    Console.WriteLine("Update availability? (y/n)");
+    if (Console.ReadLine().ToLower() == "y")
+    {
+        Console.WriteLine("Set as sold? (y/n)");
+        selectedProduct.Sold = Console.ReadLine().ToLower() == "y";
+    }
+
+    Console.WriteLine("Product updated successfully!");
 
 }
 

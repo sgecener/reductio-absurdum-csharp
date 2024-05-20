@@ -284,7 +284,47 @@ void UpdateProduct()
 
 void FindByType() 
 {
-    Console.WriteLine("3works");
+    
+    Console.WriteLine("Find Products by Type:");
+    Console.WriteLine("Choose a product type:");
+
+    // Display available product types
+    for (int i = 0; i < productTypes.Count; i++)
+    {
+        Console.WriteLine($"{i + 1}. {productTypes[i].Name}");
+    }
+
+    int typeIndex;
+    while (true)
+    {
+        if (int.TryParse(Console.ReadLine(), out typeIndex) && typeIndex >= 1 && typeIndex <= productTypes.Count)
+        {
+            break; // Exit the loop if input is valid
+        }
+        else
+        {
+            Console.WriteLine("Invalid input. Please enter a number corresponding to a product type.");
+        }
+    }
+
+    int selectedTypeId = productTypes[typeIndex - 1].Id;
+
+    Console.WriteLine($"Products of type '{productTypes[typeIndex - 1].Name}':");
+
+    bool foundProducts = false;
+    foreach (var product in products)
+    {
+        if (product.ProductTypeId == selectedTypeId)
+        {
+            Console.WriteLine($"{ProductDetails(product)} {(product.Sold ? "was sold" : "is available")} for {product.Price} gold coins");
+            foundProducts = true;
+        }
+    }
+
+    if (!foundProducts)
+    {
+        Console.WriteLine("No products found for the selected type.");
+    }
 
 }
 

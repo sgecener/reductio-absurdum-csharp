@@ -77,6 +77,7 @@ void MainMenu()
                         3. Find Product By Type
                         4. Delete Product
                         5. Update Product Details
+                        6. Available Products
                         0. Exit
                         ");
                         
@@ -115,9 +116,23 @@ void MainMenu()
             UpdateProduct();
             MainMenu();
             break;
+        case "6":
+            Console.Clear();
+            AvailableProducts();
+            MainMenu();
+            break;
 
     }
 
+}
+
+void AvailableProducts()
+{
+    List<Product> unsoldProducts = products.Where(p => !p.Sold).ToList();
+        for (int i = 0; i < unsoldProducts.Count; i++)
+            {
+                Console.WriteLine(unsoldProducts[i].Name);
+            }
 }
 
 void DisplayProducts()

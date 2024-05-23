@@ -6,7 +6,8 @@
         Name = "Cloak",
         Price = 6.00M,
         Sold = false,
-        ProductTypeId = 1
+        ProductTypeId = 1,
+        DateStocked = new DateTime(2024, 2, 20)
 
     },
     new Product()
@@ -14,7 +15,9 @@
         Name = "Harry's Wand",
         Price = 5.00M,
         Sold = true,
-        ProductTypeId = 4
+        ProductTypeId = 4,
+        DateStocked = new DateTime(2024, 1, 20)
+
 
     },
     new Product()
@@ -22,14 +25,18 @@
         Name = "Flaming Sword",
         Price = 10.00M,
         Sold = false,
-        ProductTypeId = 3
+        ProductTypeId = 3,
+        DateStocked = new DateTime(2023, 12, 20)
+
     },
     new Product()
     {
         Name = "Potion of Health",
         Price = 7.00M,
         Sold = true,
-        ProductTypeId = 2
+        ProductTypeId = 2,
+        DateStocked = new DateTime(2023, 11, 20)
+
     }
 };
 
@@ -118,7 +125,7 @@ void DisplayProducts()
     Console.WriteLine("All Products");
     for (int i = 0; i < products.Count; i++)
     {
-        Console.WriteLine($"{i + 1}. {ProductDetails(products[i])} {(products[i].Sold ? "was sold" : "is available")} for {products[i].Price} gold coins");
+        Console.WriteLine($"{i + 1}. {ProductDetails(products[i])} has been on the shelf for {products[i].DaysOnShelf} days and {(products[i].Sold ? "was sold" : "is available")} for {products[i].Price} gold coins");
     }
 }
 
@@ -270,7 +277,7 @@ void UpdateProduct()
         }
     }
 
-     Console.WriteLine($"Current availability: {(selectedProduct.Sold ? "Sold" : "Available")}");
+    Console.WriteLine($"Current availability: {(selectedProduct.Sold ? "Sold" : "Available")}");
     Console.WriteLine("Update availability? (y/n)");
     if (Console.ReadLine().ToLower() == "y")
     {
